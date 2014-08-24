@@ -22,9 +22,6 @@ data$user_name <- as.factor(data$user_name)
 ```
 
 This read those columns in as a character class instead of as factors.  I then split my data into a training set, test set, and cross validation set with the following splits: 50% training, 20% testing, 30% cross validation.  This will allow me to properly asses my out of sample error.
-Looking at the dimension of my training set, I worked on removing the values that were mostly NA.  I used the following to remove the "#DIV/0!" strings, and change the column back to a numeric class:
-
-
 ```{r}
 library(caret, quietly = T)
 
@@ -41,7 +38,9 @@ test <- buildData[-inTrain, ]
 dim(train)
 ```
 
-I then removed any variable that was 90% NA's leaving me with a data set with 60 columns versus 160.
+Looking at the dimension of my training set, I worked on removing the values that were mostly NA.  I used the following to remove the "#DIV/0!" strings, and change the column back to a numeric class:
+
+
 ```{r}
 #removing "#DIV/0!"
 for(i in 7:(ncol(train)-1)){
@@ -50,6 +49,10 @@ for(i in 7:(ncol(train)-1)){
         train[,i] <- as.numeric(train[,i])
     }
 }
+```
+
+I then removed any variable that was 90% NA's leaving me with a data set with 60 columns versus 160.
+```{r}
 #reducing size of training data
 largeNA <- colSums(is.na(train))< (nrow(train)*.9)
 trainReduced <- train[,largeNA]
@@ -68,7 +71,7 @@ mod4 = randomForest(classe~.,
 pred4 <- predict(mod4, trainReduced[,7:60])
 confusionMatrix(trainReduced[,7:60]$classe, pred4)
 ```
-This resulted in an accuracy of <99%, which I felt was sufficient to test on both my test set and cross validation set.
+This resulted in an accuracy of >99%, which I felt was sufficient to test on both my test set and cross validation set.
 
 ##Testing the Model
 I used the random forest model I created against both the test set and the cross validation to estimate my out of sample error.

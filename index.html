@@ -71,7 +71,7 @@ if (window.hljs && document.readyState && document.readyState === "complete") {
 <pre class="r"><code>data &lt;- read.table(&quot;pml-training.csv&quot;, sep = &quot;,&quot;, header = TRUE, stringsAsFactors = FALSE)
 data$classe &lt;- as.factor(data$classe)
 data$user_name &lt;- as.factor(data$user_name)</code></pre>
-<p>This read those columns in as a character class instead of as factors. I then split my data into a training set, test set, and cross validation set with the following splits: 50% training, 20% testing, 30% cross validation. This will allow me to properly asses my out of sample error. Looking at the dimension of my training set, I worked on removing the values that were mostly NA. I used the following to remove the “#DIV/0!” strings, and change the column back to a numeric class:</p>
+<p>This read those columns in as a character class instead of as factors. I then split my data into a training set, test set, and cross validation set with the following splits: 50% training, 20% testing, 30% cross validation. This will allow me to properly asses my out of sample error.</p>
 <pre class="r"><code>library(caret, quietly = T)
 
 inBuild &lt;- createDataPartition(y=data$classe,
@@ -86,15 +86,16 @@ train &lt;- buildData[inTrain, ]
 test &lt;- buildData[-inTrain, ]
 dim(train)</code></pre>
 <pre><code>## [1] 9619  160</code></pre>
-<p>I then removed any variable that was 90% NA’s leaving me with a data set with 60 columns versus 160.</p>
+<p>Looking at the dimension of my training set, I worked on removing the values that were mostly NA. I used the following to remove the “#DIV/0!” strings, and change the column back to a numeric class:</p>
 <pre class="r"><code>#removing &quot;#DIV/0!&quot;
 for(i in 7:(ncol(train)-1)){
     if(class(train[,i])==&quot;character&quot;){
         train[,i] &lt;- sub(&quot;#DIV/0!&quot;,&quot;&quot;,train[,i])
         train[,i] &lt;- as.numeric(train[,i])
     }
-}
-#reducing size of training data
+}</code></pre>
+<p>I then removed any variable that was 90% NA’s leaving me with a data set with 60 columns versus 160.</p>
+<pre class="r"><code>#reducing size of training data
 largeNA &lt;- colSums(is.na(train))&lt; (nrow(train)*.9)
 trainReduced &lt;- train[,largeNA]
 dim(trainReduced)</code></pre>
@@ -118,33 +119,33 @@ confusionMatrix(trainReduced[,7:60]$classe, pred4)</code></pre>
 ##           Reference
 ## Prediction    A    B    C    D    E
 ##          A 2735    0    0    0    0
-##          B    3 1858    0    0    0
-##          C    0    9 1669    0    0
-##          D    0    0    8 1569    0
-##          E    0    0    0    6 1762
+##          B    2 1858    1    0    0
+##          C    0   11 1665    2    0
+##          D    0    0    9 1567    1
+##          E    0    0    0    8 1760
 ## 
 ## Overall Statistics
 ##                                         
-##                Accuracy : 0.997         
-##                  95% CI : (0.996, 0.998)
+##                Accuracy : 0.996         
+##                  95% CI : (0.995, 0.998)
 ##     No Information Rate : 0.285         
 ##     P-Value [Acc &gt; NIR] : &lt;2e-16        
 ##                                         
-##                   Kappa : 0.997         
+##                   Kappa : 0.996         
 ##  Mcnemar's Test P-Value : NA            
 ## 
 ## Statistics by Class:
 ## 
 ##                      Class: A Class: B Class: C Class: D Class: E
-## Sensitivity             0.999    0.995    0.995    0.996    1.000
-## Specificity             1.000    1.000    0.999    0.999    0.999
-## Pos Pred Value          1.000    0.998    0.995    0.995    0.997
+## Sensitivity             0.999    0.994    0.994    0.994    0.999
+## Specificity             1.000    1.000    0.998    0.999    0.999
+## Pos Pred Value          1.000    0.998    0.992    0.994    0.995
 ## Neg Pred Value          1.000    0.999    0.999    0.999    1.000
 ## Prevalence              0.285    0.194    0.174    0.164    0.183
-## Detection Rate          0.284    0.193    0.174    0.163    0.183
+## Detection Rate          0.284    0.193    0.173    0.163    0.183
 ## Detection Prevalence    0.284    0.193    0.174    0.164    0.184
-## Balanced Accuracy       0.999    0.997    0.997    0.998    1.000</code></pre>
-<p>This resulted in an accuracy of &lt;99%, which I felt was sufficient to test on both my test set and cross validation set.</p>
+## Balanced Accuracy       1.000    0.997    0.996    0.996    0.999</code></pre>
+<p>This resulted in an accuracy of &gt;99%, which I felt was sufficient to test on both my test set and cross validation set.</p>
 </div>
 <div id="testing-the-model" class="section level2">
 <h2>Testing the Model</h2>
@@ -157,33 +158,33 @@ confusionMatrix(test$classe, predTest)</code></pre>
 ## 
 ##           Reference
 ## Prediction    A    B    C    D    E
-##          A 1169    1    0    0    1
-##          B    8  787    2    0    0
-##          C    0   13  704    1    0
-##          D    0    0   12  663    0
-##          E    0    3    1    6  747
+##          A 1170    1    0    0    0
+##          B    6  787    4    0    0
+##          C    0   17  698    3    0
+##          D    0    1   11  656    7
+##          E    0    0    0    4  753
 ## 
 ## Overall Statistics
-##                                         
-##                Accuracy : 0.988         
-##                  95% CI : (0.985, 0.991)
-##     No Information Rate : 0.286         
-##     P-Value [Acc &gt; NIR] : &lt;2e-16        
-##                                         
-##                   Kappa : 0.985         
-##  Mcnemar's Test P-Value : NA            
+##                                        
+##                Accuracy : 0.987        
+##                  95% CI : (0.983, 0.99)
+##     No Information Rate : 0.286        
+##     P-Value [Acc &gt; NIR] : &lt;2e-16       
+##                                        
+##                   Kappa : 0.983        
+##  Mcnemar's Test P-Value : NA           
 ## 
 ## Statistics by Class:
 ## 
 ##                      Class: A Class: B Class: C Class: D Class: E
-## Sensitivity             0.993    0.979    0.979    0.990    0.999
-## Specificity             0.999    0.997    0.996    0.997    0.997
-## Pos Pred Value          0.998    0.987    0.981    0.982    0.987
-## Neg Pred Value          0.997    0.995    0.996    0.998    1.000
-## Prevalence              0.286    0.195    0.175    0.163    0.182
-## Detection Rate          0.284    0.191    0.171    0.161    0.181
+## Sensitivity             0.995    0.976    0.979    0.989    0.991
+## Specificity             1.000    0.997    0.994    0.995    0.999
+## Pos Pred Value          0.999    0.987    0.972    0.972    0.995
+## Neg Pred Value          0.998    0.994    0.996    0.998    0.998
+## Prevalence              0.286    0.196    0.173    0.161    0.185
+## Detection Rate          0.284    0.191    0.169    0.159    0.183
 ## Detection Prevalence    0.284    0.194    0.174    0.164    0.184
-## Balanced Accuracy       0.996    0.988    0.988    0.993    0.998</code></pre>
+## Balanced Accuracy       0.997    0.987    0.987    0.992    0.995</code></pre>
 </div>
 <div id="cross-validation-set" class="section level3">
 <h3>Cross Validation Set</h3>
@@ -193,33 +194,33 @@ confusionMatrix(val$classe, predCV)</code></pre>
 ## 
 ##           Reference
 ## Prediction    A    B    C    D    E
-##          A 1674    0    0    0    0
-##          B    7 1132    0    0    0
-##          C    0   22 1002    2    0
-##          D    0    0   22  942    0
-##          E    0    4    0    6 1072
+##          A 1671    3    0    0    0
+##          B    8 1124    7    0    0
+##          C    0   26  999    1    0
+##          D    0    0   20  937    7
+##          E    0    3    1    4 1074
 ## 
 ## Overall Statistics
 ##                                         
-##                Accuracy : 0.989         
-##                  95% CI : (0.986, 0.992)
-##     No Information Rate : 0.286         
+##                Accuracy : 0.986         
+##                  95% CI : (0.983, 0.989)
+##     No Information Rate : 0.285         
 ##     P-Value [Acc &gt; NIR] : &lt;2e-16        
 ##                                         
-##                   Kappa : 0.986         
+##                   Kappa : 0.983         
 ##  Mcnemar's Test P-Value : NA            
 ## 
 ## Statistics by Class:
 ## 
 ##                      Class: A Class: B Class: C Class: D Class: E
-## Sensitivity             0.996    0.978    0.979    0.992    1.000
-## Specificity             1.000    0.999    0.995    0.996    0.998
-## Pos Pred Value          1.000    0.994    0.977    0.977    0.991
-## Neg Pred Value          0.998    0.995    0.995    0.998    1.000
-## Prevalence              0.286    0.197    0.174    0.161    0.182
-## Detection Rate          0.284    0.192    0.170    0.160    0.182
+## Sensitivity             0.995    0.972    0.973    0.995    0.994
+## Specificity             0.999    0.997    0.994    0.995    0.998
+## Pos Pred Value          0.998    0.987    0.974    0.972    0.993
+## Neg Pred Value          0.998    0.993    0.994    0.999    0.999
+## Prevalence              0.285    0.196    0.175    0.160    0.184
+## Detection Rate          0.284    0.191    0.170    0.159    0.182
 ## Detection Prevalence    0.284    0.194    0.174    0.164    0.184
-## Balanced Accuracy       0.998    0.988    0.987    0.994    0.999</code></pre>
+## Balanced Accuracy       0.997    0.985    0.984    0.995    0.996</code></pre>
 <p>Both resulted in high accuracies. I then used this model to predict against the 20 samples for final project submission. This model successfully predicted all 20 values.</p>
 </div>
 </div>
