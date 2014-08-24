@@ -8,7 +8,7 @@ output: html_document
 
 
 ##Overview
-This was a project for the Practical Machine Learning course on Coursera.  The goal of the project is to develop a machine learning algorithma to predict the "classe" variable in a data set of sensor measurements
+This was a project for the Practical Machine Learning course on Coursera.  The goal of the project is to develop a machine learning algorithm to predict the "classe" variable in a data set of sensor measurements.
 
 ##Reading in the Data and Pre-Processing
 

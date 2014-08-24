@@ -63,7 +63,7 @@ if (window.hljs && document.readyState && document.readyState === "complete") {
 <h1>Practical Machine Learning Course Project</h1>
 <div id="overview" class="section level2">
 <h2>Overview</h2>
-<p>This was a project for the Practical Machine Learning course on Coursera. The goal of the project is to develop a machine learning algorithma to predict the “classe” variable in a data set of sensor measurements</p>
+<p>This was a project for the Practical Machine Learning course on Coursera. The goal of the project is to develop a machine learning algorithm to predict the “classe” variable in a data set of sensor measurements.</p>
 </div>
 <div id="reading-in-the-data-and-pre-processing" class="section level2">
 <h2>Reading in the Data and Pre-Processing</h2>
@@ -119,32 +119,32 @@ confusionMatrix(trainReduced[,7:60]$classe, pred4)</code></pre>
 ##           Reference
 ## Prediction    A    B    C    D    E
 ##          A 2735    0    0    0    0
-##          B    2 1858    1    0    0
-##          C    0   11 1665    2    0
-##          D    0    0    9 1567    1
-##          E    0    0    0    8 1760
+##          B    6 1855    0    0    0
+##          C    0    8 1668    2    0
+##          D    0    0   13 1563    1
+##          E    0    0    0   12 1756
 ## 
 ## Overall Statistics
 ##                                         
 ##                Accuracy : 0.996         
-##                  95% CI : (0.995, 0.998)
+##                  95% CI : (0.994, 0.997)
 ##     No Information Rate : 0.285         
 ##     P-Value [Acc &gt; NIR] : &lt;2e-16        
 ##                                         
-##                   Kappa : 0.996         
+##                   Kappa : 0.994         
 ##  Mcnemar's Test P-Value : NA            
 ## 
 ## Statistics by Class:
 ## 
 ##                      Class: A Class: B Class: C Class: D Class: E
-## Sensitivity             0.999    0.994    0.994    0.994    0.999
-## Specificity             1.000    1.000    0.998    0.999    0.999
-## Pos Pred Value          1.000    0.998    0.992    0.994    0.995
-## Neg Pred Value          1.000    0.999    0.999    0.999    1.000
-## Prevalence              0.285    0.194    0.174    0.164    0.183
-## Detection Rate          0.284    0.193    0.173    0.163    0.183
+## Sensitivity             0.998    0.996    0.992    0.991    0.999
+## Specificity             1.000    0.999    0.999    0.998    0.998
+## Pos Pred Value          1.000    0.997    0.994    0.991    0.993
+## Neg Pred Value          0.999    0.999    0.998    0.998    1.000
+## Prevalence              0.285    0.194    0.175    0.164    0.183
+## Detection Rate          0.284    0.193    0.173    0.162    0.183
 ## Detection Prevalence    0.284    0.193    0.174    0.164    0.184
-## Balanced Accuracy       1.000    0.997    0.996    0.996    0.999</code></pre>
+## Balanced Accuracy       0.999    0.997    0.996    0.995    0.999</code></pre>
 <p>This resulted in an accuracy of &gt;99%, which I felt was sufficient to test on both my test set and cross validation set.</p>
 </div>
 <div id="testing-the-model" class="section level2">
@@ -158,33 +158,33 @@ confusionMatrix(test$classe, predTest)</code></pre>
 ## 
 ##           Reference
 ## Prediction    A    B    C    D    E
-##          A 1170    1    0    0    0
-##          B    6  787    4    0    0
-##          C    0   17  698    3    0
-##          D    0    1   11  656    7
-##          E    0    0    0    4  753
+##          A 1168    3    0    0    0
+##          B    8  782    7    0    0
+##          C    0   17  701    0    0
+##          D    0    0   10  665    0
+##          E    0    1    0    4  752
 ## 
 ## Overall Statistics
-##                                        
-##                Accuracy : 0.987        
-##                  95% CI : (0.983, 0.99)
-##     No Information Rate : 0.286        
-##     P-Value [Acc &gt; NIR] : &lt;2e-16       
-##                                        
-##                   Kappa : 0.983        
-##  Mcnemar's Test P-Value : NA           
+##                                         
+##                Accuracy : 0.988         
+##                  95% CI : (0.984, 0.991)
+##     No Information Rate : 0.286         
+##     P-Value [Acc &gt; NIR] : &lt;2e-16        
+##                                         
+##                   Kappa : 0.985         
+##  Mcnemar's Test P-Value : NA            
 ## 
 ## Statistics by Class:
 ## 
 ##                      Class: A Class: B Class: C Class: D Class: E
-## Sensitivity             0.995    0.976    0.979    0.989    0.991
-## Specificity             1.000    0.997    0.994    0.995    0.999
-## Pos Pred Value          0.999    0.987    0.972    0.972    0.995
-## Neg Pred Value          0.998    0.994    0.996    0.998    0.998
-## Prevalence              0.286    0.196    0.173    0.161    0.185
-## Detection Rate          0.284    0.191    0.169    0.159    0.183
+## Sensitivity             0.993    0.974    0.976    0.994    1.000
+## Specificity             0.999    0.995    0.995    0.997    0.999
+## Pos Pred Value          0.997    0.981    0.976    0.985    0.993
+## Neg Pred Value          0.997    0.994    0.995    0.999    1.000
+## Prevalence              0.286    0.195    0.174    0.162    0.183
+## Detection Rate          0.284    0.190    0.170    0.161    0.183
 ## Detection Prevalence    0.284    0.194    0.174    0.164    0.184
-## Balanced Accuracy       0.997    0.987    0.987    0.992    0.995</code></pre>
+## Balanced Accuracy       0.996    0.985    0.986    0.996    0.999</code></pre>
 </div>
 <div id="cross-validation-set" class="section level3">
 <h3>Cross Validation Set</h3>
@@ -194,33 +194,33 @@ confusionMatrix(val$classe, predCV)</code></pre>
 ## 
 ##           Reference
 ## Prediction    A    B    C    D    E
-##          A 1671    3    0    0    0
-##          B    8 1124    7    0    0
-##          C    0   26  999    1    0
-##          D    0    0   20  937    7
-##          E    0    3    1    4 1074
+##          A 1673    1    0    0    0
+##          B   15 1114   10    0    0
+##          C    0   29  995    2    0
+##          D    0    0   29  935    0
+##          E    0    0    0   11 1071
 ## 
 ## Overall Statistics
-##                                         
-##                Accuracy : 0.986         
-##                  95% CI : (0.983, 0.989)
-##     No Information Rate : 0.285         
-##     P-Value [Acc &gt; NIR] : &lt;2e-16        
-##                                         
-##                   Kappa : 0.983         
-##  Mcnemar's Test P-Value : NA            
+##                                        
+##                Accuracy : 0.984        
+##                  95% CI : (0.98, 0.987)
+##     No Information Rate : 0.287        
+##     P-Value [Acc &gt; NIR] : &lt;2e-16       
+##                                        
+##                   Kappa : 0.979        
+##  Mcnemar's Test P-Value : NA           
 ## 
 ## Statistics by Class:
 ## 
 ##                      Class: A Class: B Class: C Class: D Class: E
-## Sensitivity             0.995    0.972    0.973    0.995    0.994
-## Specificity             0.999    0.997    0.994    0.995    0.998
-## Pos Pred Value          0.998    0.987    0.974    0.972    0.993
-## Neg Pred Value          0.998    0.993    0.994    0.999    0.999
-## Prevalence              0.285    0.196    0.175    0.160    0.184
-## Detection Rate          0.284    0.191    0.170    0.159    0.182
+## Sensitivity             0.991    0.974    0.962    0.986    1.000
+## Specificity             1.000    0.995    0.994    0.994    0.998
+## Pos Pred Value          0.999    0.978    0.970    0.970    0.990
+## Neg Pred Value          0.996    0.994    0.992    0.997    1.000
+## Prevalence              0.287    0.194    0.176    0.161    0.182
+## Detection Rate          0.284    0.189    0.169    0.159    0.182
 ## Detection Prevalence    0.284    0.194    0.174    0.164    0.184
-## Balanced Accuracy       0.997    0.985    0.984    0.995    0.996</code></pre>
+## Balanced Accuracy       0.995    0.984    0.978    0.990    0.999</code></pre>
 <p>Both resulted in high accuracies. I then used this model to predict against the 20 samples for final project submission. This model successfully predicted all 20 values.</p>
 </div>
 </div>
