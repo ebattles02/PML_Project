@@ -1,0 +1,88 @@
+---
+title: "Project Write-up"
+author: "Elliott Battles"
+date: "Saturday, August 23, 2014"
+output: html_document
+---
+#Practical Machine Learning Course Project
+
+
+##Overview
+This was a project for the Practical Machine Learning course on Coursera.  The goal of the project is to develop a machine learning algorithma to predict the "classe" variable in a data set of sensor measurements
+
+##Reading in the Data and Pre-Processing
+
+When I first read the data into R, the first thing I noticed is there were a large amount of columns, and the majority of them were blank or NA.  This made things a little tricky.  One thing I noticed in a number of columns was that they contained a value "#DIV/0!" which is an error code usually seen in excel when trying to divide a number by zero.  This was throwing off R into reading columns as factors when using the read.csv function.  I instead used the following command to read in my data. 
+
+
+```{r}
+data <- read.table("pml-training.csv", sep = ",", header = TRUE, stringsAsFactors = FALSE)
+data$classe <- as.factor(data$classe)
+data$user_name <- as.factor(data$user_name)
+```
+
+This read those columns in as a character class instead of as factors.  I then split my data into a training set, test set, and cross validation set with the following splits: 50% training, 20% testing, 30% cross validation.  This will allow me to properly asses my out of sample error.
+Looking at the dimension of my training set, I worked on removing the values that were mostly NA.  I used the following to remove the "#DIV/0!" strings, and change the column back to a numeric class:
+
+
+```{r}
+library(caret, quietly = T)
+
+inBuild <- createDataPartition(y=data$classe,
+                               p = 0.7, list = FALSE)
+
+val <- data[-inBuild, ]
+buildData <- data[inBuild,]
+
+inTrain <-createDataPartition(y=buildData$classe,
+                              p = 0.7, list = FALSE)
+train <- buildData[inTrain, ]
+test <- buildData[-inTrain, ]
+dim(train)
+```
+
+I then removed any variable that was 90% NA's leaving me with a data set with 60 columns versus 160.
+```{r}
+#removing "#DIV/0!"
+for(i in 7:(ncol(train)-1)){
+    if(class(train[,i])=="character"){
+        train[,i] <- sub("#DIV/0!","",train[,i])
+        train[,i] <- as.numeric(train[,i])
+    }
+}
+#reducing size of training data
+largeNA <- colSums(is.na(train))< (nrow(train)*.9)
+trainReduced <- train[,largeNA]
+dim(trainReduced)
+```
+
+##Training the Model
+After inspecting my new reduced data set, I decided to build my model only on the numeric/integer variables.  The first columns were mainly related to the subject participant and the date/time of the measurement.  Since this was a classification problem, I did not feel they would be the most useful predictors.  I built my model first with a classification tree using the "rpart" method.  This resulted in accuracy or around 50%.  I then created a new model using a random forest. 
+```{r}
+library(randomForest, quietly = T)
+set.seed(100)
+mod4 = randomForest(classe~., 
+                    data = trainReduced[,7:60], 
+                    ntree=200, nodesize=25 )
+
+pred4 <- predict(mod4, trainReduced[,7:60])
+confusionMatrix(trainReduced[,7:60]$classe, pred4)
+```
+This resulted in an accuracy of <99%, which I felt was sufficient to test on both my test set and cross validation set.
+
+##Testing the Model
+I used the random forest model I created against both the test set and the cross validation to estimate my out of sample error.
+
+###Test Set
+```{r}
+predTest <- predict(mod4, newdata = test)
+confusionMatrix(test$classe, predTest)
+```
+
+###Cross Validation Set
+```{r}
+predCV <- predict(mod4, newdata = val)
+confusionMatrix(val$classe, predCV)
+```
+
+Both resulted in high accuracies.  I then used this model to predict against the 20 samples for final project submission.  This model successfully predicted all 20 values.
